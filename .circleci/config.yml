@@ -102,7 +102,7 @@ jobs:
       - checkout
       - restore_cache:
           keys: [frontend-build]
-     run:
+      - run:
           name: Audit frontend
           command: |
             cd frontend
@@ -116,7 +116,7 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-build]
-     run:
+      - run:
           name: Audit backend
           command: |
             cd backend
