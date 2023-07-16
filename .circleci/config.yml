@@ -169,20 +169,18 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment:
           workflow_id: <<parameters.workflow_id>>
- 
   configure-infrastructure:
-  steps:
-    - checkout
-    - add_ssh_keys:
-        fingerprints:
-          - "d4:60:ce:a0:da:a8:e1:70:71:5b:7a:29:d4:86:4a:1c:66:b4:ea:63"
-    - docker:
-        - image: python:3.7-alpine3.18
+    docker:
+      - image: python:3.7-alpine3.18
     parameters:
       workflow_id:
         type: string
         default: ${CIRCLE_WORKFLOW_ID:0:7}  
     steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "d4:60:ce:a0:da:a8:e1:70:71:5b:7a:29:d4:86:4a:1c:66:b4:ea:63"
       - run:
           name: Install dependencies
           command: |
