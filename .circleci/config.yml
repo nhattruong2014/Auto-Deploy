@@ -253,6 +253,9 @@ jobs:
         default: ${CIRCLE_WORKFLOW_ID:0:7}  
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "d4:60:ce:a0:da:a8:e1:70:71:5b:7a:29:d4:86:4a:1c:66:b4:ea:63"
       - run:
           name: Install dependencies
           command: |
@@ -275,9 +278,6 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm audit fix --audit-level=critical --force
-            npm audit fix --audit-level=critical --force
-            npm audit --audit-level=critical
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
