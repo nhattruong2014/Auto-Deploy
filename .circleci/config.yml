@@ -328,7 +328,7 @@ jobs:
       - revert-migrations:
           workflow_id: <<parameters.workflow_id>> 
       # Here's where you will add some code to rollback on failure  
-      
+
   smoke-test:
     docker:
       - image: python:3.7-alpine3.16
@@ -367,6 +367,10 @@ jobs:
   cloudfront-update:
     docker:
       - image: circleci/node:13.8.0
+    parameters:
+      workflow_id:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - checkout
       - run:
