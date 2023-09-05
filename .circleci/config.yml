@@ -369,7 +369,7 @@ jobs:
       - image: circleci/python:3.8
     steps:
     - checkout
-	  - run:
+    - run:
           name: Install Python and Create Virtual Environment
           command: |
             sudo apt-get update
