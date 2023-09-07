@@ -369,27 +369,36 @@ jobs:
       - image: circleci/python:3.8
     steps:
     - checkout
+    - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
     - run:
-          name: Install Python and Create Virtual Environment
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y python3 python3-venv
-            python3 -m venv venv
-            source venv/bin/activate
-            pip install --upgrade pip
+        name: install dependencies
+        command: |
+          python3 -m venv venv
+          . venv/bin/activate
+          make install
+          pip install joblib
+          # Install hadolint
+          wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+          chmod +x /bin/hadolint
     - run:
-          name: Install Docker
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y docker.io
-            sudo systemctl start docker
-            sudo systemctl enable docker
+        name: Install Python and Create Virtual Environment
+        command: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-venv
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
     - run:
-          name: Install Hadolint
-          command: |
-            wget -O hadolint https://github.com/hadolint/hadolint/releases/download/v2.6.1/hadolint-Linux-x86_64
-            chmod +x hadolint
-            sudo mv hadolint /usr/local/bin/
+        name: Install Docker
+        command: |
+          sudo apt-get update
+          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+          sudo systemctl start docker
+          sudo systemctl enable docker
   install-kubernetes:
     docker:
       - image: circleci/python:3.8
