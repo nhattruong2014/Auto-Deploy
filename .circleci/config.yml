@@ -491,11 +491,9 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
-post-deploy-workflow:
-    jobs:
       - install-docker:
           requires: [deploy-infrastructure]
       - install-kubernetes:
           requires: [install-docker]
+      # - cleanup:
+      #     requires: [cloudfront-update]
